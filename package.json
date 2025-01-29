@@ -17,11 +17,11 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@langchain/anthropic": "^0.3.1",
-    "@langchain/community": "^0.3.1",
-    "@langchain/core": "^0.3.3",
-    "@langchain/langgraph": "^0.2.8",
-    "langchain": "^0.3.2"
+    "@langchain/anthropic": "^0.3.12",
+    "@langchain/community": "^0.3.27",
+    "@langchain/core": "^0.3.37",
+    "@langchain/langgraph": "^0.2.43",
+    "langchain": "^0.3.14"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.1.0",
