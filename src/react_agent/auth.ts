@@ -6,8 +6,7 @@ import { getSupabaseClient } from "./lib/auth/supabase-client.js";
 
 const supabase = getSupabaseClient();
 
-// TODO: studio user in JS
-// if ctx.user.identity == "langgraph-studio-user":
+const STUDIO_USER_ID = "langgraph-studio-user";
 
 export const auth = new Auth()
   .authenticate(async (request: Request) => {
@@ -50,95 +49,108 @@ export const auth = new Auth()
     return {
       identity: user.id,
       permissions: [
-        "threads:write",
+        "threads:create",
+        "threads:create_run",
         "threads:read",
+        "threads:delete",
+        "threads:update",
+        "threads:search",
         "assistants:create",
         "assistants:read",
+        "assistants:delete",
+        "assistants:update",
+        "assistants:search",
         "store:access",
       ],
     };
   })
   // THREADS: create
-  .on("threads:create", ({ value, user, permissions }) => {
-    if (!permissions.includes("threads:write")) {
-      throw new HTTPException(403, { message: "Unauthorized" });
+  .on("threads:create", ({ value, user }) => {
+    if (user.identity === STUDIO_USER_ID) {
+      return;
     }
+
     value.metadata ??= {};
     value.metadata.owner = user.identity;
     return { owner: user.identity };
   })
   // THREADS: create_run
-  .on("threads:create_run", ({ value, user, permissions }) => {
-    if (!permissions.includes("threads:write")) {
-      throw new HTTPException(403, { message: "Unauthorized" });
+  .on("threads:create_run", ({ value, user }) => {
+    if (user.identity === STUDIO_USER_ID) {
+      return;
     }
+
     value.metadata ??= {};
     value.metadata.owner = user.identity;
     return { owner: user.identity };
   })
   // THREADS: read, update, delete, search
   .on("threads:read", ({ user }) => {
+    if (user.identity === STUDIO_USER_ID) {
+      return;
+    }
+
     return { owner: user.identity };
   })
   .on("threads:update", ({ user, permissions }) => {
-    if (!permissions.includes("threads:write")) {
-      throw new HTTPException(403, { message: "Unauthorized" });
+    if (user.identity === STUDIO_USER_ID) {
+      return;
     }
+
     return { owner: user.identity };
   })
   .on("threads:delete", ({ user, permissions }) => {
-    if (!permissions.includes("threads:write")) {
-      throw new HTTPException(403, { message: "Unauthorized" });
+    if (user.identity === STUDIO_USER_ID) {
+      return;
     }
+
     return { owner: user.identity };
   })
   .on("threads:search", ({ user, permissions }) => {
-    if (
-      !permissions.includes("threads:read") &&
-      !permissions.includes("threads:write")
-    ) {
-      throw new HTTPException(403, { message: "Unauthorized" });
+    if (user.identity === STUDIO_USER_ID) {
+      return;
     }
+
     return { owner: user.identity };
   })
   // ASSISTANTS: create
-  .on("assistants:create", ({ value, user, permissions }) => {
-    if (!permissions.includes("assistants:create")) {
-      throw new HTTPException(403, { message: "Unauthorized" });
+  .on("assistants:create", ({ value, user }) => {
+    if (user.identity === STUDIO_USER_ID) {
+      return;
     }
+
     value.metadata ??= {};
     value.metadata.owner = user.identity;
     return { owner: user.identity };
   })
   // ASSISTANTS: read, update, delete, search
-  .on("assistants:read", ({ user, permissions }) => {
+  .on("assistants:read", ({ user }) => {
+    if (user.identity === STUDIO_USER_ID) {
+      return;
+    }
+
     return { owner: user.identity };
   })
-  .on("assistants:update", ({ user, permissions }) => {
-    if (!permissions.includes("assistants:create")) {
-      throw new HTTPException(403, { message: "Unauthorized" });
+  .on("assistants:update", ({ user }) => {
+    if (user.identity === STUDIO_USER_ID) {
+      return;
+    }
+
+    return { owner: user.identity };
+  })
+  .on("assistants:delete", ({ user }) => {
+    if (user.identity === STUDIO_USER_ID) {
+      return;
     }
     return { owner: user.identity };
   })
-  .on("assistants:delete", ({ user, permissions }) => {
-    if (!permissions.includes("assistants:create")) {
-      throw new HTTPException(403, { message: "Unauthorized" });
-    }
-    return { owner: user.identity };
-  })
-  .on("assistants:search", ({ user, permissions }) => {
-    if (
-      !permissions.includes("assistants:read") &&
-      !permissions.includes("assistants:create")
-    ) {
-      throw new HTTPException(403, { message: "Unauthorized" });
+  .on("assistants:search", ({ user, value }) => {
+    if (user.identity === STUDIO_USER_ID) {
+      return;
     }
     return { owner: user.identity };
   })
   // STORE: permission-based access
-  .on("store", ({ user, permissions }) => {
-    if (!permissions.includes("store:access")) {
-      throw new HTTPException(403, { message: "Unauthorized" });
-    }
-    // Optionally, you can add more fine-grained checks here
+  .on("store", ({ user }) => {
+    return { owner: user.identity };
   });

@@ -8,12 +8,12 @@ let supabaseInstance: ReturnType<typeof createClient> | null = null;
  * @returns A Supabase client instance
  */
 export function getSupabaseClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_KEY;
 
   if (!supabaseUrl || !supabaseKey) {
     throw new Error(
-      "Missing Supabase configuration: NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      "Missing Supabase configuration: SUPABASE_URL or SUPABASE_KEY",
     );
   }
 
