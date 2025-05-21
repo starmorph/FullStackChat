@@ -21,6 +21,9 @@
     "@langchain/community": "^0.3.27",
     "@langchain/core": "^0.3.37",
     "@langchain/langgraph": "^0.2.57",
+    "@langchain/langgraph-sdk": "^0.0.77",
+    "@supabase/supabase-js": "^2.49.7",
+    "dotenv": "^16.5.0",
     "langchain": "^0.3.14"
   },
   "devDependencies": {
@@ -28,9 +31,9 @@
     "@eslint/js": "^9.9.1",
     "@tsconfig/recommended": "^1.0.7",
     "@types/jest": "^29.5.0",
+    "@types/node": "^22.15.21",
     "@typescript-eslint/eslint-plugin": "^5.59.8",
     "@typescript-eslint/parser": "^5.59.8",
-    "dotenv": "^16.4.5",
     "eslint": "^8.41.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
