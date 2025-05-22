@@ -79,8 +79,10 @@ export const auth = new Auth()
         "assistants:delete",
         "assistants:update",
         "assistants:search",
+        "deployments:read",
+        "deployments:search",
         "store:access",
-      ],
+      ],  
     };
   })
   // THREADS: create
