@@ -10,7 +10,25 @@ const STUDIO_USER_ID = "langgraph-studio-user";
 
 export const auth = new Auth()
   .authenticate(async (request: Request) => {
-    console.log("[auth] Incoming request", request.url);
+    // Allow CORS preflight requests to pass through
+    if (request.method === "OPTIONS") {
+      return {
+        identity: "anonymous",
+        permissions: [],
+        is_authenticated: false,
+        display_name: "CORS Preflight"
+      };
+    }
+    // Detailed logging for debugging
+    const headersObj: Record<string, string> = {};
+    for (const [key, value] of (request.headers as any)) {
+      headersObj[key] = value;
+    }
+    console.log("[auth] Incoming request", {
+      url: request.url,
+      method: request.method,
+      headers: headersObj,
+    });
     // Parse Authorization header
     const authHeader = request.headers.get("authorization");
     if (!authHeader) {
