@@ -16,12 +16,12 @@ export const auth = new Auth()
         identity: "anonymous",
         permissions: [],
         is_authenticated: false,
-        display_name: "CORS Preflight"
+        display_name: "CORS Preflight",
       };
     }
     // Detailed logging for debugging
     const headersObj: Record<string, string> = {};
-    for (const [key, value] of (request.headers as any)) {
+    for (const [key, value] of request.headers as any) {
       headersObj[key] = value;
     }
     console.log("[auth] Incoming request", {
@@ -82,7 +82,7 @@ export const auth = new Auth()
         "deployments:read",
         "deployments:search",
         "store:access",
-      ],  
+      ],
     };
   })
   // THREADS: create
