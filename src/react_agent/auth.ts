@@ -10,11 +10,6 @@ const STUDIO_USER_ID = "langgraph-studio-user";
 
 export const auth = new Auth()
   .authenticate(async (request: Request) => {
-    if (request.method === "OPTIONS") {
-      console.log("[auth] Skipping auth for OPTIONS preflight", request.url);
-      // Return a dummy user object to satisfy type requirements
-      return { identity: "cors-preflight", permissions: [] };
-    }
     console.log("[auth] Incoming request", request.url);
     // Parse Authorization header
     const authHeader = request.headers.get("authorization");
